@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Reservation - Aling Nena Restaurant</title>
+    <link rel="stylesheet" href="css/style_badges.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Table Reservation</h1>
+            <div class="header-right">
+                <a href="badges_lab.html" class="btn-reserve">Back to Menu</a>
+            </div>
+        </header>
+
+        <div class="reservation-section">
+            <form class="reservation-form" id="reservationForm">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Available Time Slots</label>
+                    <div class="timeslot-grid" id="timeSlots"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="party">Party Size</label>
+                    <select id="party" required>
+                        <option value="">Select number of guests</option>
+                        <option value="1-2">1-2 People</option>
+                        <option value="3-4">3-4 People</option>
+                        <option value="5-6">5-6 People</option>
+                        <option value="7-8">7-8 People</option>
+                        <option value="9+">9+ People</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="special">Special Requests</label>
+                    <textarea id="special" rows="3"></textarea>
+                </div>
+
+                <button type="submit" class="btn-reserve">Confirm Reservation</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="card">
+                <div class="card-img">
+                    <img class="img-fluid" src="img/confirmation.svg" alt="Confirmation">
+                </div>
+                <div class="card-title">
+                    <p>Reservation Confirmed!</p>
+                </div>
+                <div class="card-text">
+                    <p>Your table has been reserved. A confirmation email has been sent to your address.</p>
+                </div>
+                <button class="btn-continue-shopping" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/reservations.js"></script>
+</body>
+</html>

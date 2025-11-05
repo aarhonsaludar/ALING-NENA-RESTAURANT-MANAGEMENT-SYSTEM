@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Login</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-image">
+
+    <section class="hero text-center" aria-label="home" id="home">
+
+        <ul class="hero-slider" data-hero-slider>
+
+          <li class="slider-item active" data-hero-slider-item>
+
+            <div class="slider-bg">
+              <img src="img/hero-slider-1.jpg" width="1880" height="950" alt="" class="img-cover">
+            </div>
+
+            <p class="label-2 section-subtitle slider-reveal">Classic & Clean</p>
+
+            <h1 class="display-1 hero-title slider-reveal">
+              Welcome to <br>
+              Aling Nena's Kitchen
+            </h1>
+
+            <p class="body-2 hero-text slider-reveal">
+              Experience authentic Filipino home cooking at its finest
+            </p>
+
+            <a href="#" class="btn btn-primary slider-reveal login-trigger">
+              <span class="text text-1">Login</span>
+
+              <span class="text text-2" aria-hidden="true">Login</span>
+            </a>
+
+          </li>
+
+          <li class="slider-item" data-hero-slider-item>
+
+            <div class="slider-bg">
+              <img src="img/hero-slider-2.jpg" width="1880" height="950" alt="" class="img-cover">
+            </div>
+
+            <p class="label-2 section-subtitle slider-reveal">homestyle cooking</p>
+
+            <h1 class="display-1 hero-title slider-reveal">
+              Taste of Home <br>
+              Since 1995
+            </h1>
+
+            <p class="body-2 hero-text slider-reveal">
+              Where every dish is cooked with love and care
+            </p>
+
+            <a href="#" class="btn btn-primary slider-reveal login-trigger">
+              <span class="text text-1">Login</span>
+
+              <span class="text text-2" aria-hidden="true">Login</span>
+            </a>
+
+          </li>
+
+          <li class="slider-item" data-hero-slider-item>
+
+            <div class="slider-bg">
+              <img src="img/hero-slider-3.jpg" width="1880" height="950" alt="" class="img-cover">
+            </div>
+
+            <p class="label-2 section-subtitle slider-reveal">quality & tradition</p>
+
+            <h1 class="display-1 hero-title slider-reveal">
+              Your Neighborhood <br>
+              Food Haven
+            </h1>
+
+            <p class="body-2 hero-text slider-reveal">
+              Serving happiness one plate at a time
+            </p>
+
+              <a href="#" class="btn btn-primary slider-reveal login-trigger">
+              <span class="text text-1">Login</span>
+
+              <span class="text text-2" aria-hidden="true">Login</span>
+            </a>
+
+          </li>
+
+        </ul>
+
+        <button class="slider-btn prev" aria-label="slide to previous" data-prev-btn>
+          <ion-icon name="chevron-back"></ion-icon>
+        </button>
+
+        <button class="slider-btn next" aria-label="slide to next" data-next-btn>
+          <ion-icon name="chevron-forward"></ion-icon>
+        </button>
+
+
+      </section>
+
+
+
+    <!-- Convert login container to modal -->
+    <div id="loginModal" class="modal">
+        <div class="login-container">
+            <span class="close-modal">&times;</span>
+            <img src="img/aling_nena_logo.png" alt="" class="img-fluid logo">
+            <h2 class="mb-5">Tindahan Ni Aling Nena</h2>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="login-btn">Sign In</button>
+                <div id="errorMessage" class="error-message">Invalid username or password</div>
+            </form>
+            <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                <p style="color: #666; font-size: 14px;">Don't have an account? <a href="register.html" style="color: #ff6b35; text-decoration: none; font-weight: 600;">Register Now</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade custom-modal" id="statusSuccessModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false"> 
+      <div class="modal-dialog modal-dialog-centered" role="document"> 
+          <div class="modal-content">
+              <div class="modal-body text-center p-4 p-md-5">
+                  <div class="success-icon mb-4">
+                      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                          <circle class="success-circle" fill="none" stroke="#198754" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
+                          <polyline class="success-check" fill="none" stroke="#198754" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5"/>
+                      </svg>
+                  </div>
+                  <h3 class="text-success fw-bold mb-3">Login Successful!</h3>
+                  <p class="text-muted mb-4">You have successfully logged in to your account.</p>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="modal fade custom-modal" id="statusErrorsModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+              <div class="modal-body text-center p-4 p-md-5">
+                  <div class="error-icon mb-4">
+                      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                          <circle class="error-circle" fill="none" stroke="#dc3545" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
+                          <line class="error-line" fill="none" stroke="#dc3545" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" x1="34.4" y1="37.9" x2="95.8" y2="92.3"/>
+                          <line class="error-line" fill="none" stroke="#dc3545" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" x1="95.8" y1="38" X2="34.4" y2="92.2"/>
+                      </svg>
+                  </div>
+                  <h3 class="text-danger fw-bold mb-3">Login Failed</h3>
+                  <p class="text-muted mb-4">Invalid username or password. Please try again.</p>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+
+
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>

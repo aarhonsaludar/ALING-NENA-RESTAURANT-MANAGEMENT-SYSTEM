@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu</title>
+    <link rel="stylesheet" href="css/style_badges.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Aling Nena Restaurant</h1>
+            <div class="user-info">
+                Welcome, <span id="username">Guest</span>
+            </div>
+            <div class="header-right">
+                <a href="reservation.html" class="btn-reserve">Reserve a Table</a>
+                <a href="profile.html" class="btn-profile" style="background: #28a745; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-right: 10px;">My Profile</a>
+                <div class="wishlist-dropdown">
+                    <a href="#" id="wishlistLink" class="wishlist-icon">
+                        ❤️
+                        <span class="wishlist-count" id="wishlistCount">0</span>
+                    </a>
+                    <div class="wishlist-content" id="wishlistContent">
+                        <div class="wishlist-header">My Wishlist</div>
+                        <div class="wishlist-items" id="wishlistItems">
+                            <!-- Wishlist items will be populated here -->
+                        </div>
+                    </div>
+                </div>
+                <a href="#" id="cartLink" class="cart-icon">
+                    🛒
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+                <button id="logout">Logout</button>
+            </div>
+        </header>
+        
+        <div class="search-filter-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Search dishes..." class="search-input">
+            </div>
+            <div class="filter-controls">
+                <select id="sortFilter" class="filter-select">
+                    <option value="">Sort By</option>
+                    <option value="name-asc">Name (A-Z)</option>
+                    <option value="name-desc">Name (Z-A)</option>
+                    <option value="price-asc">Price (Low to High)</option>
+                    <option value="price-desc">Price (High to Low)</option>
+                    <option value="rating-desc">Rating (High to Low)</option>
+                </select>
+                <select id="priceFilter" class="filter-select">
+                    <option value="">All Prices</option>
+                    <option value="0-100">Under ₱100</option>
+                    <option value="100-150">₱100 - ₱150</option>
+                    <option value="150-200">₱150 - ₱200</option>
+                    <option value="200-999">Above ₱200</option>
+                </select>
+                <button id="clearFilters" class="btn-clear-filters">Clear Filters</button>
+            </div>
+        </div>
+
+        <div class="categories-section">
+            <h2 class="categories-title">Menu Categories</h2>
+            <ul class="categories-list" id="categoriesList">
+            </ul>
+        </div>
+        
+        <div class="results-info" id="resultsInfo"></div>
+        
+        <div class="menu" id="menuItems">
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="card">
+                   <div class="card-img">
+                       <img class="img-fluid" src="img/cart.svg">
+                   </div>
+                   <div class="card-title">
+                       <p>Added to Cart!</p>
+                   </div>
+                   <div class="card-text">
+                       <p>Your item has been added to cart successfully!</p>
+                   </div>
+                   <button class="btn-continue-shopping" data-bs-dismiss="modal">Continue Shopping</button>
+               </div>
+        </div>
+    </div>
+    
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/restaurant_menu.js"></script>
+
+    <script>
+        window.onload = function() {
+            const username = localStorage.getItem('username') || 'Guest';
+            document.getElementById('username').textContent = username;
+            
+            const cartCount = localStorage.getItem('cartCount') || 0;
+            document.getElementById('cartCount').textContent = cartCount;
+        };
+    </script>
+</body>
+</html>
