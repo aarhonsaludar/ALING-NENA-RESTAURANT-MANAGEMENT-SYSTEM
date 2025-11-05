@@ -30,7 +30,7 @@ session_start();
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #313647;
             min-height: 100vh;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
@@ -205,8 +205,7 @@ session_start();
         <div class="dashboard-header">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h1><i class="fas fa-chart-line me-2"></i>Admin Dashboard</h1>
-                    <p class="subtitle mb-0">Aling Nena Restaurant Analytics</p>
+                    <h1></i>Admin Dashboard</h1>
                 </div>
                 <div>
                     <a href="manage_orders.php" class="btn btn-outline-dark me-2">
