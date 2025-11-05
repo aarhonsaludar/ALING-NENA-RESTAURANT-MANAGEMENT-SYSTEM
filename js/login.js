@@ -122,8 +122,17 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
             }));
             showSuccessModal(data.user.role);
         } else {
-            console.error('Login failed:', data.message);
-            showFailedModal();
+            // Check if email verification is required
+            if (data.requires_verification) {
+                console.log('Email verification required for:', data.email);
+                modal.classList.remove('show');
+                alert('Please verify your email before logging in. Redirecting to verification page...');
+                // Redirect to verification page
+                window.location.href = 'verify_email.html';
+            } else {
+                console.error('Login failed:', data.message);
+                showFailedModal();
+            }
         }
     })
     .catch(error => {

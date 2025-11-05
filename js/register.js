@@ -89,11 +89,26 @@ document.getElementById('registerForm').addEventListener('submit', function(even
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            successModal.show();
-            setTimeout(() => {
-                successModal.hide();
-                window.location.href = 'index.html';
-            }, 2000);
+            // Check if email verification is required
+            if (data.requires_verification) {
+                // Show success message briefly, then redirect to verification page
+                successModal.show();
+                document.querySelector('#successModal h3').textContent = 'Check Your Email!';
+                document.querySelector('#successModal p').textContent = 'We sent a verification code to your email. Redirecting to verification page...';
+                
+                setTimeout(() => {
+                    successModal.hide();
+                    // Redirect to email verification page
+                    window.location.href = 'verify_email.html';
+                }, 2000);
+            } else {
+                // No verification needed - redirect to login
+                successModal.show();
+                setTimeout(() => {
+                    successModal.hide();
+                    window.location.href = 'index.html';
+                }, 2000);
+            }
         } else {
             document.getElementById('errorModalMessage').textContent = data.message;
             errorModal.show();

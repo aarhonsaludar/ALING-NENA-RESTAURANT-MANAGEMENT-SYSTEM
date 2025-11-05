@@ -341,6 +341,9 @@ function displayMenuItems() {
     // Sort categories alphabetically
     categoriesToDisplay.sort();
     
+    // Use DocumentFragment for better performance
+    const fragment = document.createDocumentFragment();
+    
     // Create a section for each category
     categoriesToDisplay.forEach(categoryName => {
         // Filter items for this category
@@ -362,58 +365,50 @@ function displayMenuItems() {
         const categoryGrid = document.createElement('div');
         categoryGrid.className = 'category-items';
         
-        // Add menu items to this category grid
+        // Build HTML string instead of createElement for better performance
+        let itemsHTML = '';
         categoryItems.forEach(item => {
-            const menuItemDiv = document.createElement('div');
-            menuItemDiv.className = 'menu-item';
-            
             const stars = '⭐'.repeat(Math.floor(item.rating)) + 
                          (item.rating % 1 >= 0.5 ? '½⭐' : '');
+            const inWishlist = wishlist.includes(item.id);
                          
-            menuItemDiv.innerHTML = `
-                <img src="${item.image}" alt="${item.name}">
-                <div class="menu-item-details">
-                    <div class="menu-item-name">${item.name}</div>
-                    <div class="menu-item-desc">${item.desc}</div>
-                    <div class="rating">
-                        <span class="rating-stars">${stars}</span>
-                        <span class="rating-count">(${item.rating} / 5 - ${item.ratingCount} reviews)</span>
-                    </div>
-                    <div class="menu-item-price">₱${item.price.toFixed(2)}</div>
-                    <div class="item-actions">
-                        <button class="add-to-cart" data-id="${item.id}">Add to Cart</button>
-                        <button class="toggle-wishlist ${wishlist.includes(item.id) ? 'in-wishlist' : ''}" data-id="${item.id}">
-                            ${wishlist.includes(item.id) ? '❤️' : '🤍'}
-                        </button>
+            itemsHTML += `
+                <div class="menu-item">
+                    <img src="${item.image}" alt="${item.name}" loading="lazy">
+                    <div class="menu-item-details">
+                        <div class="menu-item-name">${item.name}</div>
+                        <div class="menu-item-desc">${item.desc}</div>
+                        <div class="rating">
+                            <span class="rating-stars">${stars}</span>
+                            <span class="rating-count">(${item.rating} / 5 - ${item.ratingCount} reviews)</span>
+                        </div>
+                        <div class="menu-item-price">₱${item.price.toFixed(2)}</div>
+                        <div class="item-actions">
+                            <button class="add-to-cart" data-id="${item.id}">Add to Cart</button>
+                            <button class="toggle-wishlist ${inWishlist ? 'in-wishlist' : ''}" data-id="${item.id}">
+                                ${inWishlist ? '❤️' : '🤍'}
+                            </button>
+                        </div>
                     </div>
                 </div>
             `;
-            
-            categoryGrid.appendChild(menuItemDiv);
         });
+        
+        // Set innerHTML once instead of appending multiple times
+        categoryGrid.innerHTML = itemsHTML;
         
         // Add the grid to the category section
         categorySection.appendChild(categoryGrid);
         
-        // Add the category section to the menu container
-        menuContainer.appendChild(categorySection);
+        // Add to fragment instead of directly to DOM
+        fragment.appendChild(categorySection);
     });
     
-    // Re-add event listeners to "Add to Cart" buttons
-    document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.addEventListener('click', function() {
-            const foodId = this.getAttribute('data-id');
-            addToCart(foodId);
-        });
-    });
-
-    // Add event listeners to wishlist buttons
-    document.querySelectorAll('.toggle-wishlist').forEach(button => {
-        button.addEventListener('click', function() {
-            const foodId = this.getAttribute('data-id');
-            toggleWishlist(foodId);
-        });
-    });
+    // Single DOM update - much faster!
+    menuContainer.appendChild(fragment);
+    
+    // Event listeners are added using event delegation in DOMContentLoaded
+    // No need to re-add them here - improves performance
 }
 
 // Update results info display
@@ -503,10 +498,16 @@ document.addEventListener('DOMContentLoaded', function() {
         let searchTimeout;
         searchInput.addEventListener('input', function(e) {
             clearTimeout(searchTimeout);
+            const value = e.target.value;
             searchTimeout = setTimeout(() => {
-                searchQuery = e.target.value;
-                requestAnimationFrame(() => displayMenuItems());
-            }, 150); // Debounce for 150ms
+                searchQuery = value;
+                // Use requestIdleCallback for better performance
+                if ('requestIdleCallback' in window) {
+                    requestIdleCallback(() => displayMenuItems());
+                } else {
+                    requestAnimationFrame(() => displayMenuItems());
+                }
+            }, 300); // Increased to 300ms for better performance
         });
     }
     
@@ -548,6 +549,30 @@ document.addEventListener('DOMContentLoaded', function() {
             displayMenuItems();
         });
     }
+    
+    // Event delegation for Add to Cart and Wishlist buttons (PERFORMANCE BOOST)
+    // This handles all button clicks with a single event listener instead of hundreds
+    document.getElementById('menuItems').addEventListener('click', function(e) {
+        // Handle Add to Cart button clicks
+        if (e.target.classList.contains('add-to-cart') || e.target.closest('.add-to-cart')) {
+            e.preventDefault();
+            const button = e.target.classList.contains('add-to-cart') ? e.target : e.target.closest('.add-to-cart');
+            const foodId = button.getAttribute('data-id');
+            if (foodId) {
+                addToCart(foodId);
+            }
+        }
+        
+        // Handle Wishlist button clicks
+        if (e.target.classList.contains('toggle-wishlist') || e.target.closest('.toggle-wishlist')) {
+            e.preventDefault();
+            const button = e.target.classList.contains('toggle-wishlist') ? e.target : e.target.closest('.toggle-wishlist');
+            const foodId = button.getAttribute('data-id');
+            if (foodId) {
+                toggleWishlist(foodId);
+            }
+        }
+    });
 });
 
 function addToCart(foodId) {

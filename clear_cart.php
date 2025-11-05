@@ -1,29 +1,26 @@
 <?php
+session_start();
 header('Content-Type: application/json');
 
-// Connect to database
 require_once('connect.php');
 
-// Get user_id
-$user_id = $_POST['user_id'] ?? 0;
+// Get user_id from query parameter
+$user_id = $_GET['user_id'] ?? null;
 
-// Validate input
-if (empty($user_id)) {
-    echo json_encode(['success' => false, 'message' => 'Missing user_id']);
+if (!$user_id) {
+    echo json_encode(['success' => false, 'message' => 'User ID is required']);
     exit;
 }
 
-// Delete all cart items for the user
+// Delete all cart items for this user
 $stmt = $conn->prepare("DELETE FROM cart WHERE user_id = ?");
 $stmt->bind_param("i", $user_id);
-$success = $stmt->execute();
-$stmt->close();
 
-if ($success) {
-    echo json_encode(['success' => true]);
+if ($stmt->execute()) {
+    echo json_encode(['success' => true, 'message' => 'Cart cleared successfully']);
 } else {
-    echo json_encode(['success' => false, 'message' => $conn->error]);
+    echo json_encode(['success' => false, 'message' => 'Failed to clear cart']);
 }
 
+$stmt->close();
 $conn->close();
-?>

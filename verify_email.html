@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification - Aling Nena's Kitchen</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/filipino-theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff6b35 0%, #d32f2f 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .verification-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .verification-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #ff6b35 0%, #d32f2f 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+        }
+        
+        .code-inputs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        
+        .code-input {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        
+        .code-input:focus {
+            border-color: #ff6b35;
+            outline: none;
+            transform: scale(1.05);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+        
+        .timer {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin: 15px 0;
+        }
+        
+        .timer.warning {
+            color: #ff6b35;
+            font-weight: bold;
+        }
+        
+        .resend-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .resend-link a {
+            color: #ff6b35;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .resend-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .resend-link.disabled a {
+            color: #ccc;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="verification-container">
+        <div class="verification-icon">
+            <i class="fas fa-envelope"></i>
+        </div>
+        
+        <h2 class="text-center mb-3">Verify Your Email</h2>
+        <p class="text-center text-muted">
+            We've sent a 6-digit verification code to<br>
+            <strong id="userEmail"></strong>
+        </p>
+        
+        <form id="verificationForm">
+            <div class="code-inputs">
+                <input type="text" class="code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="off" required>
+                <input type="text" class="code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="off" required>
+                <input type="text" class="code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="off" required>
+                <input type="text" class="code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="off" required>
+                <input type="text" class="code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="off" required>
+                <input type="text" class="code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="off" required>
+            </div>
+            
+            <div class="timer" id="timer">
+                Code expires in <span id="timeRemaining">15:00</span>
+            </div>
+            
+            <button type="submit" class="btn-filipino w-100 mb-3">
+                <i class="fas fa-check-circle"></i>
+                Verify Email
+            </button>
+            
+            <div class="resend-link" id="resendContainer">
+                <span>Didn't receive the code? </span>
+                <a href="#" id="resendLink">Resend Code</a>
+            </div>
+        </form>
+        
+        <div class="text-center mt-4">
+            <a href="index.html" class="text-muted" style="text-decoration: none;">
+                <i class="fas fa-arrow-left"></i> Back to Login
+            </a>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center p-5">
+                    <div style="width: 80px; height: 80px; margin: 0 auto 20px; background: linear-gradient(135deg, #28a745 0%, #20c997 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-check" style="font-size: 40px; color: white;"></i>
+                    </div>
+                    <h3 class="text-success fw-bold mb-3">Email Verified!</h3>
+                    <p class="text-muted mb-0">Your account has been successfully verified. Redirecting to login...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center p-5">
+                    <div style="width: 80px; height: 80px; margin: 0 auto 20px; background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-times" style="font-size: 40px; color: white;"></i>
+                    </div>
+                    <h3 class="text-danger fw-bold mb-3">Verification Failed</h3>
+                    <p class="text-muted mb-4" id="errorMessage">Invalid verification code</p>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Try Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center; display: none;">
+        <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
+            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3 mb-0" id="loadingText">Processing...</p>
+        </div>
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize modals
+        const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        
+        function showLoading(text = 'Processing...') {
+            document.getElementById('loadingText').textContent = text;
+            loadingOverlay.style.display = 'flex';
+        }
+        
+        function hideLoading() {
+            loadingOverlay.style.display = 'none';
+        }
+        
+        function showSuccess(message) {
+            successModal.show();
+        }
+        
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            errorModal.show();
+        }
+        
+        // Get user info from session
+        let userId = null;
+        let userEmail = '';
+        let userName = '';
+        let expiryTime = null;
+        let timerInterval = null;
+        let canResend = false;
+        
+        // Ensure loading is hidden on page load
+        hideLoading();
+        
+        // Check if user has pending verification
+        fetch('get_verification_info.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    userId = data.user_id;
+                    userEmail = data.email;
+                    userName = data.name;
+                    document.getElementById('userEmail').textContent = userEmail;
+                    
+                    if (data.expiry) {
+                        expiryTime = new Date(data.expiry).getTime();
+                        startTimer();
+                    }
+                } else {
+                    // No pending verification - redirect without showing error modal
+                    console.log('No pending verification found');
+                    alert('No pending verification found. Please register first.');
+                    window.location.href = 'register.html';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to load verification info. Please try again.');
+                window.location.href = 'register.html';
+            });
+        
+        // Code input handling
+        const codeInputs = document.querySelectorAll('.code-input');
+        
+        codeInputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                const value = e.target.value;
+                
+                // Only allow numbers
+                if (!/^\d$/.test(value)) {
+                    e.target.value = '';
+                    return;
+                }
+                
+                // Move to next input
+                if (value && index < codeInputs.length - 1) {
+                    codeInputs[index + 1].focus();
+                }
+            });
+            
+            input.addEventListener('keydown', (e) => {
+                // Handle backspace
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    codeInputs[index - 1].focus();
+                }
+                
+                // Handle paste
+                if (e.key === 'v' && (e.ctrlKey || e.metaKey)) {
+                    e.preventDefault();
+                    navigator.clipboard.readText().then(text => {
+                        const digits = text.replace(/\D/g, '').slice(0, 6);
+                        digits.split('').forEach((digit, i) => {
+                            if (codeInputs[i]) {
+                                codeInputs[i].value = digit;
+                            }
+                        });
+                        if (codeInputs[digits.length]) {
+                            codeInputs[digits.length].focus();
+                        }
+                    });
+                }
+            });
+        });
+        
+        // Focus first input
+        codeInputs[0].focus();
+        
+        // Timer function
+        function startTimer() {
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+        
+        function updateTimer() {
+            const now = new Date().getTime();
+            const distance = expiryTime - now;
+            
+            if (distance < 0) {
+                clearInterval(timerInterval);
+                document.getElementById('timer').classList.add('warning');
+                // Don't show modal, just enable resend
+                document.getElementById('timer').innerHTML = 
+                    '<span class="text-danger fw-bold">Code expired! Please resend a new code.</span>';
+                enableResend();
+                return;
+            }
+            
+            const minutes = Math.floor(distance / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            const timeRemainingElement = document.getElementById('timeRemaining');
+            if (timeRemainingElement) {
+                timeRemainingElement.textContent = 
+                    `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            // Warning when less than 2 minutes
+            if (distance < 2 * 60 * 1000) {
+                document.getElementById('timer').classList.add('warning');
+            }
+            
+            // Enable resend when less than 5 minutes
+            if (distance < 5 * 60 * 1000) {
+                enableResend();
+            }
+        }
+        
+        function enableResend() {
+            canResend = true;
+            document.getElementById('resendContainer').classList.remove('disabled');
+        }
+        
+        // Form submission
+        document.getElementById('verificationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Get code from inputs
+            const code = Array.from(codeInputs).map(input => input.value).join('');
+            
+            if (code.length !== 6) {
+                showError('Please enter all 6 digits');
+                return;
+            }
+            
+            showLoading('Verifying code...');
+            
+            try {
+                // Add timeout to prevent infinite loading
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+                
+                const response = await fetch('verify_email.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        code: code
+                    }),
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) {
+                    throw new Error('Server error: ' + response.status);
+                }
+                
+                const data = await response.json();
+                hideLoading();
+                
+                console.log('Verification response:', data);
+                
+                if (data.success) {
+                    showSuccess('Email verified successfully!');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                } else {
+                    showError(data.message || 'Invalid verification code');
+                    // Clear inputs on error
+                    codeInputs.forEach(input => input.value = '');
+                    codeInputs[0].focus();
+                }
+            } catch (error) {
+                hideLoading();
+                console.error('Verification error:', error);
+                
+                if (error.name === 'AbortError') {
+                    showError('Request timeout. Please check your connection and try again.');
+                } else {
+                    showError('Verification failed. Please try again.');
+                }
+                
+                // Clear inputs on error
+                codeInputs.forEach(input => input.value = '');
+                codeInputs[0].focus();
+            }
+        });
+        
+        // Resend code
+        document.getElementById('resendLink').addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            if (!canResend) {
+                alert('Please wait a bit before requesting a new code');
+                return;
+            }
+            
+            showLoading('Sending new code...');
+            
+            try {
+                const response = await fetch('resend_verification.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                });
+                
+                const data = await response.json();
+                hideLoading();
+                
+                if (data.success) {
+                    alert('New verification code sent to your email!');
+                    
+                    // Reset timer
+                    if (data.expiry) {
+                        expiryTime = new Date(data.expiry).getTime();
+                        clearInterval(timerInterval);
+                        document.getElementById('timer').classList.remove('warning');
+                        // Reset timer HTML
+                        document.getElementById('timer').innerHTML = 
+                            'Code expires in <span id="timeRemaining">15:00</span>';
+                        startTimer();
+                    }
+                    
+                    // Clear inputs
+                    codeInputs.forEach(input => input.value = '');
+                    codeInputs[0].focus();
+                    
+                    // Disable resend temporarily
+                    canResend = false;
+                    document.getElementById('resendContainer').classList.add('disabled');
+                } else {
+                    alert(data.message || 'Failed to send new code');
+                }
+            } catch (error) {
+                hideLoading();
+                console.error('Resend error:', error);
+                alert('Failed to send code. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

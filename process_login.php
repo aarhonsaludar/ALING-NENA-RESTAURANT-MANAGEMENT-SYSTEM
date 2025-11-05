@@ -15,8 +15,20 @@ if (empty($username) || empty($password)) {
     exit;
 }
 
+// Check if email_verified column exists
+$email_verified_exists = false;
+$columns_query = "SHOW COLUMNS FROM users LIKE 'email_verified'";
+$column_result = $conn->query($columns_query);
+if ($column_result && $column_result->num_rows > 0) {
+    $email_verified_exists = true;
+}
+
 // Query the database - get user by username first
-$stmt = $conn->prepare("SELECT id, username, email, full_name, phone, password, role, status FROM users WHERE username = ?");
+if ($email_verified_exists) {
+    $stmt = $conn->prepare("SELECT id, username, email, full_name, phone, password, role, status, email_verified FROM users WHERE username = ?");
+} else {
+    $stmt = $conn->prepare("SELECT id, username, email, full_name, phone, password, role, status FROM users WHERE username = ?");
+}
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -27,10 +39,22 @@ if ($result->num_rows === 1) {
     // Set default role if not set
     $user_role = $user['role'] ?? 'user';
     $user_status = $user['status'] ?? 'active';
+    $email_verified = $email_verified_exists ? ($user['email_verified'] ?? 0) : 1;
 
     // Check if account is active
     if ($user_status !== 'active') {
         echo json_encode(['success' => false, 'message' => 'Account is not active']);
+        exit;
+    }
+
+    // Check if email is verified (only if column exists)
+    if ($email_verified_exists && $email_verified != 1) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Please verify your email before logging in. Check your inbox for the verification code.',
+            'requires_verification' => true,
+            'email' => $user['email']
+        ]);
         exit;
     }
 
