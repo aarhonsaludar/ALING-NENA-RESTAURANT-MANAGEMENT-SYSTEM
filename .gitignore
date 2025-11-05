@@ -1,0 +1,103 @@
+# ===================================
+# Restaurant Management System
+# Security & Configuration Files
+# ===================================
+
+# Database Configuration
+connect.php
+config.php
+db_config.php
+*.sql.backup
+
+# Credentials & Sensitive Files
+IMPORTANT!! LOGIN CREDENTIALS HERE.txt
+.env
+.env.local
+.env.*.local
+
+# User Uploaded Files (Menu Images)
+# Keep directory structure but ignore uploaded images
+img/Main Dishes/*.jpg
+img/Main Dishes/*.png
+img/Main Dishes/*.gif
+img/Main Dishes/*.webp
+img/Appetizers/*.jpg
+img/Appetizers/*.png
+img/Appetizers/*.gif
+img/Appetizers/*.webp
+img/Salads/*.jpg
+img/Salads/*.png
+img/Salads/*.gif
+img/Salads/*.webp
+img/Desserts/*.jpg
+img/Desserts/*.png
+img/Desserts/*.gif
+img/Desserts/*.webp
+
+# Keep placeholder/default images
+!img/placeholder.jpg
+!img/placeholder.png
+!img/aling_nena_logo.png
+!img/hero-slider-*.jpg
+
+# Session Files
+sessions/
+tmp/
+
+# Logs
+*.log
+error_log
+debug.log
+logs/
+
+# Backup Files
+*.backup
+*.bak
+*.old
+*.orig
+backups/
+
+# IDE & Editor Files
+.vscode/settings.json
+.vscode/launch.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary Files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.cache
+
+# Node Modules (if using any build tools)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Composer (if using PHP dependencies)
+vendor/
+composer.lock
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Test & Development Files
+test_*.php
+debug_*.php
+phpinfo.php
+
+# Documentation (optional - uncomment if you don't want to commit)
+# *.md
+# !README.md
