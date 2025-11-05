@@ -1,0 +1,634 @@
+/**
+ * ============================================
+ * ALING NENA'S KITCHEN - FILIPINO THEME
+ * Traditional Filipino Restaurant Design System
+ * ============================================
+ */
+
+/* ============================================
+   FILIPINO COLOR PALETTE
+   Warm, welcoming traditional colors
+   ============================================ */
+:root {
+    /* Primary Colors - Filipino Red & Yellow */
+    --filipino-red: #c8102e;
+    --filipino-yellow: #fcd116;
+    --filipino-blue: #0038a8;
+    
+    /* Warm Earth Tones */
+    --warm-red: #d32f2f;
+    --warm-orange: #ff6b35;
+    --warm-yellow: #f9ca24;
+    --warm-brown: #8d6e63;
+    --bamboo-green: #6d8b74;
+    
+    /* Accent Colors */
+    --sunset-orange: #ff7043;
+    --mango-yellow: #ffa726;
+    --ube-purple: #7b4b94;
+    --pandan-green: #66bb6a;
+    
+    /* Neutrals */
+    --off-white: #fef9f3;
+    --light-beige: #f5e6d3;
+    --dark-wood: #4a342e;
+    --text-dark: #2c1810;
+    --text-light: #6d4c41;
+    
+    /* UI Colors */
+    --success: #66bb6a;
+    --warning: #ffa726;
+    --error: #ef5350;
+    --info: #42a5f5;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
+    --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.25);
+    
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-full: 9999px;
+    
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+}
+
+/* ============================================
+   TOAST NOTIFICATIONS
+   Beautiful toast notifications for feedback
+   ============================================ */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 400px;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    border-left: 4px solid var(--warm-orange);
+    animation: slideInRight 0.3s ease-out;
+    min-width: 300px;
+}
+
+.toast.success {
+    border-left-color: var(--success);
+}
+
+.toast.error {
+    border-left-color: var(--error);
+}
+
+.toast.warning {
+    border-left-color: var(--warning);
+}
+
+.toast.info {
+    border-left-color: var(--info);
+}
+
+.toast-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.toast.success .toast-icon {
+    color: var(--success);
+}
+
+.toast.error .toast-icon {
+    color: var(--error);
+}
+
+.toast.warning .toast-icon {
+    color: var(--warning);
+}
+
+.toast.info .toast-icon {
+    color: var(--info);
+}
+
+.toast-content {
+    flex: 1;
+}
+
+.toast-title {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 2px;
+    font-size: 14px;
+}
+
+.toast-message {
+    color: var(--text-light);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.toast-close:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-dark);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+.toast.removing {
+    animation: slideOutRight 0.3s ease-out forwards;
+}
+
+/* ============================================
+   LOADING INDICATORS
+   Beautiful loading states
+   ============================================ */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9998;
+    backdrop-filter: blur(4px);
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid var(--light-beige);
+    border-top-color: var(--warm-orange);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.loading-text {
+    position: absolute;
+    margin-top: 100px;
+    color: white;
+    font-weight: 500;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Inline Loading Button */
+.btn-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.btn-loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid white;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+/* ============================================
+   CONFIRMATION DIALOGS
+   Beautiful modal confirmations
+   ============================================ */
+.confirm-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9997;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-out;
+}
+
+.confirm-dialog {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: 30px;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: var(--shadow-xl);
+    animation: scaleIn 0.3s ease-out;
+    text-align: center;
+}
+
+.confirm-dialog-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+}
+
+.confirm-dialog-icon.warning {
+    background: rgba(255, 167, 38, 0.1);
+    color: var(--warning);
+}
+
+.confirm-dialog-icon.danger {
+    background: rgba(239, 83, 80, 0.1);
+    color: var(--error);
+}
+
+.confirm-dialog-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 12px;
+}
+
+.confirm-dialog-message {
+    color: var(--text-light);
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+.confirm-dialog-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.confirm-dialog-button {
+    padding: 12px 32px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-size: 15px;
+}
+
+.confirm-dialog-button.cancel {
+    background: var(--light-beige);
+    color: var(--text-dark);
+}
+
+.confirm-dialog-button.cancel:hover {
+    background: #e5d5c0;
+}
+
+.confirm-dialog-button.confirm {
+    background: linear-gradient(135deg, var(--warm-orange) 0%, var(--warm-red) 100%);
+    color: white;
+}
+
+.confirm-dialog-button.confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   EMPTY STATES
+   Beautiful empty state designs
+   ============================================ */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-state-icon {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 24px;
+    background: linear-gradient(135deg, var(--light-beige) 0%, var(--off-white) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    color: var(--warm-orange);
+}
+
+.empty-state-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 12px;
+}
+
+.empty-state-message {
+    color: var(--text-light);
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.empty-state-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, var(--warm-orange) 0%, var(--warm-red) 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    transition: all 0.3s;
+    box-shadow: var(--shadow-sm);
+}
+
+.empty-state-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ============================================
+   FILIPINO PATTERN DECORATIONS
+   Traditional patterns and motifs
+   ============================================ */
+.filipino-pattern-bg {
+    position: relative;
+    overflow: hidden;
+}
+
+.filipino-pattern-bg::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(252, 209, 22, 0.02) 10px, rgba(252, 209, 22, 0.02) 20px);
+    pointer-events: none;
+}
+
+/* Banig (Mat) Pattern */
+.banig-pattern {
+    background-image: 
+        linear-gradient(90deg, rgba(141, 110, 99, 0.05) 1px, transparent 1px),
+        linear-gradient(rgba(141, 110, 99, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+/* ============================================
+   FILIPINO-THEMED BUTTONS
+   ============================================ */
+.btn-filipino {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--warm-orange) 0%, var(--warm-red) 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+}
+
+.btn-filipino:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    color: white;
+}
+
+.btn-filipino-outline {
+    background: white;
+    color: var(--warm-orange);
+    border: 2px solid var(--warm-orange);
+}
+
+.btn-filipino-outline:hover {
+    background: var(--warm-orange);
+    color: white;
+}
+
+/* ============================================
+   CART & WISHLIST BADGES
+   ============================================ */
+.cart-badge, .wishlist-badge {
+    position: relative;
+    display: inline-block;
+}
+
+.cart-badge .badge-count, 
+.wishlist-badge .badge-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--warm-red);
+    color: white;
+    border-radius: var(--radius-full);
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 20px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    animation: badgePop 0.3s ease-out;
+}
+
+@keyframes badgePop {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* ============================================
+   PRINT STYLES FOR RECEIPTS
+   ============================================ */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    
+    .receipt-print, .receipt-print * {
+        visibility: visible;
+    }
+    
+    .receipt-print {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+    
+    .no-print {
+        display: none !important;
+    }
+    
+    .receipt-container {
+        box-shadow: none !important;
+        border: 1px solid #ddd;
+    }
+    
+    @page {
+        margin: 0.5in;
+    }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+    .toast-container {
+        left: 10px;
+        right: 10px;
+        max-width: none;
+    }
+    
+    .toast {
+        min-width: auto;
+    }
+    
+    .confirm-dialog {
+        padding: 24px;
+        max-width: 90%;
+    }
+    
+    .confirm-dialog-buttons {
+        flex-direction: column;
+    }
+    
+    .confirm-dialog-button {
+        width: 100%;
+    }
+    
+    .empty-state-icon {
+        width: 100px;
+        height: 100px;
+        font-size: 40px;
+    }
+    
+    .empty-state-title {
+        font-size: 20px;
+    }
+}
+
+/* ============================================
+   FORM VALIDATION STYLES
+   ============================================ */
+.form-group.has-error input,
+.form-group.has-error select,
+.form-group.has-error textarea {
+    border-color: var(--error);
+    background-color: rgba(239, 83, 80, 0.05);
+}
+
+.form-group.has-success input,
+.form-group.has-success select,
+.form-group.has-success textarea {
+    border-color: var(--success);
+    background-color: rgba(102, 187, 106, 0.05);
+}
+
+.error-message-field {
+    color: var(--error);
+    font-size: 13px;
+    margin-top: 4px;
+    display: none;
+}
+
+.form-group.has-error .error-message-field {
+    display: block;
+}
+
+.success-message-field {
+    color: var(--success);
+    font-size: 13px;
+    margin-top: 4px;
+    display: none;
+}
+
+.form-group.has-success .success-message-field {
+    display: block;
+}

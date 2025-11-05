@@ -24,8 +24,12 @@ $result = $stmt->get_result();
 if ($result->num_rows === 1) {
     $user = $result->fetch_assoc();
 
+    // Set default role if not set
+    $user_role = $user['role'] ?? 'user';
+    $user_status = $user['status'] ?? 'active';
+
     // Check if account is active
-    if (isset($user['status']) && $user['status'] !== 'active') {
+    if ($user_status !== 'active') {
         echo json_encode(['success' => false, 'message' => 'Account is not active']);
         exit;
     }
@@ -42,7 +46,7 @@ if ($result->num_rows === 1) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['user_type'] = 'registered';
-        $_SESSION['role'] = $user['role'] ?? 'user';
+        $_SESSION['role'] = $user_role;
 
         echo json_encode([
             'success' => true,
@@ -52,7 +56,7 @@ if ($result->num_rows === 1) {
                 'email' => $user['email'],
                 'full_name' => $user['full_name'],
                 'phone' => $user['phone'],
-                'role' => $user['role'] ?? 'user'
+                'role' => $user_role
             ]
         ]);
     } else {

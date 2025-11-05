@@ -63,13 +63,12 @@ if ($result->num_rows > 0) {
 }
 $stmt->close();
 
-// Hash password (in production, use password_hash())
-// For consistency with existing system, we're using plain text
-// In a real application, ALWAYS use password_hash()
-$hashed_password = $password; // Should be: password_hash($password, PASSWORD_DEFAULT);
+// Hash password using bcrypt
+$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-// Insert new user
-$stmt = $conn->prepare("INSERT INTO users (full_name, username, email, phone, password) VALUES (?, ?, ?, ?, ?)");
+// Insert new user with default role and status
+$stmt = $conn->prepare("INSERT INTO users (full_name, username, email, phone, password, role, status, created_at) VALUES (?, ?, ?, ?, ?, 'user', 'active', NOW())");
+$stmt->bind_param("sssss", $full_name, $username, $email, $phone, $hashed_password);
 $stmt->bind_param("sssss", $full_name, $username, $email, $phone, $hashed_password);
 
 if ($stmt->execute()) {
